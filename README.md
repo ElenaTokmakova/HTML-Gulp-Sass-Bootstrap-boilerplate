@@ -9,4 +9,4 @@ npm install
 
 # 4 Get started
 gulp serve - starts localhost server with browser-sync, watches HTML, Sass, JS with hot reloading
-gulp buil - minify CSS/JS and builds the app into the dist directory, ready for production
+gulp build - minify CSS/JS and builds the app into the dist directory, ready for production
