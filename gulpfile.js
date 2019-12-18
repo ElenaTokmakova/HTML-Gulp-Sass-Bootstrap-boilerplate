@@ -1,4 +1,5 @@
 const gulp = require('gulp'),
+      babel = require('gulp-babel'),
       sass = require('gulp-sass'),
       prefix = require('gulp-autoprefixer'),
       postcss = require("gulp-postcss"),
@@ -15,16 +16,17 @@ const gulp = require('gulp'),
 const paths = {
     styles: {
         src: './assets/sass/main.scss',
+        watch: ['./assets/sass/*.scss', './assets/sass/layouts/*.scss'],
         dest: './assets/css',
         dist: './dist/assets/css'
     },
     scripts: {
         src: [
             './assets/js/jquery-3.3.1.slim.min.js',
-            './assets/js/popper.min.js',
             './assets/js/bootstrap.min.js',
             './assets/js/scripts.js'
         ],
+        watch: ['./assets/js/scripts/*.js', './assets/js/scripts.js'],
         dest: './assets/js',
         dist: './dist/assets/js'
     }
@@ -45,6 +47,9 @@ function style() {
 function script() {
     return gulp
         .src(paths.scripts.src)
+        .pipe(babel({
+			presets: ['@babel/preset-env']
+		}))
         .pipe(sourcemaps.init())
         .pipe(concat('main.js'))
         .pipe(sourcemaps.write('./'))
@@ -76,7 +81,7 @@ function serveAndWatch() {
             baseDir: "./"
         }
     });
-    gulp.watch(paths.styles.src, style);
+    gulp.watch(paths.styles.watch, style);
     gulp.watch(paths.scripts.src, script);
     gulp.watch(['*.html', '*.php']).on('change', browserSync.reload);
 }
@@ -91,7 +96,8 @@ function buildAssets() {
 		'*.html',
 		'*.php',
 		'favicon.ico',
-		"assets/img/**"
+        "assets/img/**",
+        "media/**"
 	], { base: './'})
 		.pipe(gulp.dest('dist'));
 }
